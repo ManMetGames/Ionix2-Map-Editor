@@ -2715,6 +2715,7 @@ void PropertiesWidget::paste()
     }
 }
 
+
 void PropertiesWidget::showAddValueProperty()
 {
     QDialog *PropertyWindow;
@@ -2727,7 +2728,6 @@ void PropertiesWidget::showAddValueProperty()
     QHBoxLayout *BoxColliderLayout;
     QHBoxLayout *SpriteComponentLayout;
     QHBoxLayout *AudioPlayerComponentLayout;
-
     //Rigidbody label
     QLabel *RB_EntityIDLabel;
     QLabel *RB_GravityLabel;
@@ -2859,8 +2859,10 @@ void PropertiesWidget::showAddValueProperty()
     RB_BodyTypeLabel = new QLabel(QString::fromStdString("Body Type:"));
 
     //Rigidbody content
+
     RB_EntityID = new QSpinBox();
     RB_EntityID->setEnabled(false);
+
 
     RB_Density = new QDoubleSpinBox();
     RB_Friction = new QDoubleSpinBox();
@@ -3032,9 +3034,11 @@ void PropertiesWidget::showAddValueProperty()
         }
     });
 
+
     connect(ButtonBox, &QDialogButtonBox::accepted, this, [=]{
         switch(ComponentLayout->currentIndex()){
             case 0:
+
                 addProperty(QString::fromStdString("Rigidbody.Density"), RB_Density->value());
                 addProperty(QString::fromStdString("Rigidbody.Friction"), RB_Friction->value());
                 addProperty(QString::fromStdString("Rigidbody.Gravity"), RB_Gravity->isChecked());

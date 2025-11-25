@@ -30,7 +30,7 @@ class QScrollArea;
 namespace Tiled {
 
 class Object;
-
+class MapObject;
 class AddValueProperty;
 class CustomProperties;
 class Document;
@@ -59,6 +59,7 @@ public:
 
     GroupProperty *customPropertiesGroup() const;
     PropertiesView *propertiesView() const { return mPropertiesView; }
+
 
 signals:
     void bringToFront();
