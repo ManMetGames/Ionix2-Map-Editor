@@ -84,7 +84,7 @@ public:
     bool exportMap = false;
     bool exportTileset = false;
     bool newInstance = false;
-    bool g_darkTheme = true;  // default = dark
+
     Preferences::ExportOptions exportOptions;
 
 
@@ -133,78 +133,7 @@ static void initializePluginsAndExtensions()
     ScriptManager::instance().ensureInitialized();
 }
 
-static void applyDarkTheme()
-{
-    g_darkTheme = true;
-    qApp->setStyleSheet(
-        uR"(
-            QMainWindow, QWidget {
-                background-color: #1e2127;
-                color: white;
-            }
-            QMenuBar, QMenu {
-                background-color: #252a31;
-                color: white;
-            }
-            QMenu::item:selected {
-                background-color: #3a7bff;
-            }
-            QToolBar {
-                background-color: #252a31;
-                border: none;
-            }
-            MapView, Tiled--MapScene {
-                background-color: #1e2127;
-                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFklEQVQoU42PQc7AQAzD5hS7bW4bL8EF9wIAG0UTpAAAAABJRU5ErkJggg==');
-                background-repeat: repeat;
-            }
-            /* Fix some widgets that were too dark */
-            QLineEdit, QSpinBox, QComboBox {
-                background-color: #2d323a;
-                color: white;
-                border: 1px solid #444;
-            }
-            QDockWidget {
-                background-color: #1e2127;
-            }
-        )"_qs
-        );
-}
 
-static void applyLightTheme()
-{
-    g_darkTheme = false;
-    qApp->setStyleSheet(
-        uR"(
-            QMainWindow, QWidget {
-                background-color: #f5f5f5;
-                color: black;
-            }
-            QMenuBar, QMenu {
-                background-color: #e8e8e8;
-                color: black;
-            }
-            QMenu::item:selected {
-                background-color: #0078d4;
-            }
-            QToolBar {
-                background-color: #e8e8e8;
-                border: none;
-            }
-            MapView, Tiled--MapScene {
-                background-color: #ffffff;
-            }
-            QLineEdit, QSpinBox, QComboBox {
-                background-color: white;
-                color: black;
-                border: 1px solid #aaa;
-            }
-            QDockWidget {
-                background-color: #f5f5f5;
-            }
-        )"_qs
-        );
-}
 
 
 /**
@@ -533,7 +462,7 @@ int main(int argc, char *argv[])
     a.setApplicationDisplayName(u"Ionix"_qs);           // Best & modern way (Qt 6.0+)
     a.setApplicationName(u"Ionix"_qs);                  // Optional, for consistency
     a.setOrganizationName(u"Ionix"_qs);                 // Optional
-   /* qApp->setStyleSheet(
+    qApp->setStyleSheet(
         uR"(
         QMainWindow, QWidget {
             background-color: #1e2127;
@@ -544,7 +473,7 @@ int main(int argc, char *argv[])
             background-repeat: repeat;
         }
     )"_qs
-        );*/
+        );
 
 
 
