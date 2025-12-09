@@ -464,14 +464,29 @@ int main(int argc, char *argv[])
     a.setOrganizationName(u"Ionix"_qs);                 // Optional
     qApp->setStyleSheet(
         uR"(
-        QMainWindow, QWidget {
-            background-color: #1e2127;
-            color: white;
-        }
-        MapView, Tiled--MapScene {
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFklEQVQoU42PQc7AQAzD5hS7bW4bL8EF9wIAG0UTpAAAAABJRU5ErkJggg==');
-            background-repeat: repeat;
-        }
+    /* 1. Only the actual map canvas (the checkerboard area) */
+    Tiled--MapView {
+        background-color: #ff0061;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFklEQVQoU42PQc7AQAzD5hS7bW4bL8EF9wIAG0UTpAAAAABJRU5ErkJggg==');
+        background-repeat: repeat;
+    }
+
+    /* 2. Optional: make the map grid a bit more visible on this color */
+    Tiled--MapScene {
+        color: rgba(255, 255, 255, 30);   /* faint white grid lines */
+    }
+
+    /* 3. If you still want the main window and panels a bit darker but not full purple */
+    QMainWindow {
+        background-color: #ff0061;
+    }
+    QDockWidget, QToolBar {
+        background-color: #a69500;
+    }
+    QDockWidget::title {
+        background-color: #00ff96;
+        padding: 8px;
+    }
     )"_qs
         );
 
