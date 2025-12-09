@@ -464,31 +464,60 @@ int main(int argc, char *argv[])
     a.setOrganizationName(u"Ionix"_qs);                 // Optional
     qApp->setStyleSheet(
         uR"(
-    /* 1. Only the actual map canvas (the checkerboard area) */
     Tiled--MapView {
         background-color: #ff0061;
         background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAFklEQVQoU42PQc7AQAzD5hS7bW4bL8EF9wIAG0UTpAAAAABJRU5ErkJggg==');
         background-repeat: repeat;
     }
+    Tiled--MapScene { color: #1c2d59 }
 
-    /* 2. Optional: make the map grid a bit more visible on this color */
-    Tiled--MapScene {
-        color: rgba(255, 255, 255, 30);   /* faint white grid lines */
-    }
+    QMainWindow { background-color: #4b73d8; }
+    QDockWidget, QToolBar { background-color: #152244; }
+    QDockWidget::title { background-color: #152244; padding: 8px; }
+    Q
+QToolButton {
+    background: transparent;
+    color: #152244;
+}
 
-    /* 3. If you still want the main window and panels a bit darker but not full purple */
-    QMainWindow {
-        background-color: #ff0061;
-    }
-    QDockWidget, QToolBar {
-        background-color: #a69500;
-    }
-    QDockWidget::title {
-        background-color: #00ff96;
-        padding: 8px;
-    }
-    )"_qs
-        );
+QToolButton:hover {
+    background-color: rgba(255,255,255,30);
+}
+QMenuBar, QToolBar {
+    background-color: #152244;
+}
+QMenuBar::item {
+    color: #ffffff;
+}
+QToolButton:pressed {
+    background-color: rgba(255,255,255,60);
+}
+
+QTreeView {
+    background-color: #4b73d8;
+    color: #0a2d4d;
+    alternate-background-color: #152244;
+    show-decoration-selected: 1;
+}
+QDockWidget QTreeView {
+    background-color: #164b8d;
+}
+
+
+QTreeView::item {
+    padding: 4px;
+}
+
+QTreeView::item:selected {
+    background-color: #152244;
+    color: #ffffff;
+}
+
+QTreeView::item:hover {
+    background-color: #152244;
+}
+
+    )"_qs);
 
 
 
