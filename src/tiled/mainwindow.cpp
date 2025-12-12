@@ -2361,9 +2361,21 @@ void MainWindow::exportAsJson()
         }
     }
 
-    if(tmj&&doc)
-        tmj->write(doc->map(),path,{});
-    qDebug() << "TMJ export done.";
+    if(tmj)
+    {
+        //create new instance of export helper with customised options
+        Preferences::ExportOptions options = Preferences::instance()->exportOptions();
+        options |= Preferences::EmbedTilesets;
+
+        Tiled::ExportHelper exportHelper(options);
+        //prepareExportMap expects smart ptr
+        //Cache the map we are exporting - ready to write
+        std::unique_ptr<Tiled::Map> exportMap;
+        const Tiled::Map *mapForExport = exportHelper.prepareExportMap(doc->map(),exportMap);
+        //instead of passing in doc->map in directly
+        //we write the new export ready map produced by export helper with out custom options
+        tmj->write(mapForExport, path, exportHelper.formatOptions());
+    }
 }
 
 
