@@ -2329,11 +2329,15 @@ void MainWindow::onRunClient()
 
     exportAsJson();
 
-    const QString programPath = QString::fromUtf8(
-        "C:\\Users\\samth\\Downloads\\Game-Engines-25-26-Ionix-2\\bin"
-            "\\Debug-x86_64-windows\\Client\\Client.exe"
-        );
-    bool started = QProcess::startDetached(programPath);
+    const QString ClientFolderPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("../Client"));
+
+    QDir().mkpath(ClientFolderPath);
+
+    const QString ClientPath = QDir(ClientFolderPath).filePath(QString::fromStdString("Client.exe"));
+
+    bool started = QProcess::startDetached(ClientPath);
+    qDebug() << ClientPath;
+
     if (!started)
         QMessageBox::warning(this, tr("Error"), tr("Failed to launch Client.exe"));
 }
