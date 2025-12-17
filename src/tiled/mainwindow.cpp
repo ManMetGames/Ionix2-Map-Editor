@@ -2352,8 +2352,11 @@ void MainWindow::exportAsJson()
 
     qDebug() << "doc:" << doc;
 
-    const QString path = QStringLiteral("C:/Ionix2/GameData/current_map.json");
-    QDir().mkpath(QFileInfo(path).absolutePath());
+    const QString exportPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("../Client/Maps"));
+
+    QDir().mkpath(exportPath);
+
+    const QString path = QDir(exportPath).filePath(QString::fromStdString("current_map.json"));
 
     Tiled::MapFormat *tmj = nullptr;
 
