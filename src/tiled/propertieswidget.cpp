@@ -3118,13 +3118,18 @@ void PropertiesWidget::showAddValueProperty()
     MainLayout->addWidget(ButtonBox);
     MainLayout->setContentsMargins(10,10,10,10);
 
-    QDir relativeFilePath(QString::fromStdString("Game-Engines-25-26-Ionix-2/Assets"));
+
+    const QDir AssetsFolderPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("Client/Assets"));
+
+    const QString CreateAssetsFolder = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("../Client/Assets"));
+
+    QDir().mkpath(CreateAssetsFolder);
 
     connect(ObjectComponents, QOverload<int>::of(&QComboBox::activated), ComponentLayout,&QStackedLayout::setCurrentIndex);
 
     connect(APC_BrowseAudioFile, &QPushButton::clicked, [=]{
         QString APC_AudioFilePath = QFileDialog::getOpenFileName(PropertyWindow, QString::fromStdString("Choose Audio File"),
-                                                QString::fromStdString("/Game-Engines-25-26-Ionix-2/Assets"),
+                                                QDir::currentPath(),
                                                 tr("Audio File (*.wav)"));
 
         if (!APC_AudioFilePath.isEmpty())
@@ -3136,7 +3141,7 @@ void PropertiesWidget::showAddValueProperty()
 
     connect(SC_BrowseSpriteFile, &QPushButton::clicked, [=]{
         QString SC_SpriteFilePath = QFileDialog::getOpenFileName(PropertyWindow, QString::fromStdString("Choose Sprite File"),
-                                                                 tr("/home"),
+                                                                 QDir::currentPath(),
                                                                  tr("Sprite File (*.png *.jpg)"));
         if (!SC_SpriteFilePath.isEmpty())
         {
@@ -3146,7 +3151,7 @@ void PropertiesWidget::showAddValueProperty()
 
     connect(AC_BrowseTextureFile, &QPushButton::clicked, [=]{
         QString AC_TextureFilePath = QFileDialog::getOpenFileName(PropertyWindow, QString::fromStdString("Choose Texture File"),
-                                                                 tr("/home"),
+                                                                 QDir::currentPath(),
                                                                  tr("Image File (*.png *.jpg)"));
         if (!AC_TextureFilePath.isEmpty())
         {
@@ -3180,15 +3185,15 @@ void PropertiesWidget::showAddValueProperty()
                 addProperty(QString::fromStdString("SpriteComponent.Width"), SC_Width->value());
                 addProperty(QString::fromStdString("SpriteComponent.Height"), SC_Height->value());
                 addProperty(QString::fromStdString("SpriteComponent.ZOrder"), SC_ZOrder->value());
-                addProperty(QString::fromStdString("SpriteComponent.SpriteFilePath"), relativeFilePath.relativeFilePath(SpriteFilePath->text()));
+                addProperty(QString::fromStdString("SpriteComponent.SpriteFilePath"), AssetsFolderPath.relativeFilePath(SpriteFilePath->text()));
                 break;
             case 3:
                 addProperty(QString::fromStdString("AudioPlayerComponent.PlayOnAwake"), APC_PlayOnAwake->isChecked());
-                addProperty(QString::fromStdString("AudioPlayerComponent.AudioFilePath"), relativeFilePath.relativeFilePath(AudioFilePath->text()));
+                addProperty(QString::fromStdString("AudioPlayerComponent.AudioFilePath"), AssetsFolderPath.relativeFilePath(AudioFilePath->text()));
                 break;
             case 4:
                 addProperty(QString::fromStdString("AnimatorComponent.FrameSize"), AC_FrameSize->value());
-                addProperty(QString::fromStdString("AnimatorComponent.TextureFilePath"), relativeFilePath.relativeFilePath(TextureFilePath->text()));
+                addProperty(QString::fromStdString("AnimatorComponent.TextureFilePath"), AssetsFolderPath.relativeFilePath(TextureFilePath->text()));
                 addProperty(QString::fromStdString("AnimatorComponent.Width"), AC_Width->value());
                 addProperty(QString::fromStdString("AnimatorComponent.Height"), AC_Height->value());
                 addProperty(QString::fromStdString("AnimatorComponent.Rows"), AC_Rows->value());
