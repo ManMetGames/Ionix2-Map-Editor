@@ -2457,11 +2457,15 @@ void MainWindow::onRunClient()
 
     exportAsJson();
 
-    const QString programPath = QString::fromUtf8(
-        "C:\\Users\\samth\\Downloads\\Game-Engines-25-26-Ionix-2\\bin"
-            "\\Debug-x86_64-windows\\Client\\Client.exe"
-        );
-    bool started = QProcess::startDetached(programPath);
+    const QString ClientFolderPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("../Client"));
+
+    QDir().mkpath(ClientFolderPath);
+
+    const QString ClientPath = QDir(ClientFolderPath).filePath(QString::fromStdString("Client.exe"));
+
+    bool started = QProcess::startDetached(ClientPath);
+    qDebug() << ClientPath;
+
     if (!started)
         QMessageBox::warning(this, tr("Error"), tr("Failed to launch Client.exe"));
 }
@@ -2476,8 +2480,11 @@ void MainWindow::exportAsJson()
 
     qDebug() << "doc:" << doc;
 
-    const QString path = QStringLiteral("C:/Ionix2/GameData/current_map.json");
-    QDir().mkpath(QFileInfo(path).absolutePath());
+    const QString exportPath = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QString::fromStdString("../Client/Maps"));
+
+    QDir().mkpath(exportPath);
+
+    const QString path = QDir(exportPath).filePath(QString::fromStdString("current_map.json"));
 
     Tiled::MapFormat *tmj = nullptr;
 
@@ -2489,9 +2496,21 @@ void MainWindow::exportAsJson()
         }
     }
 
-    if(tmj&&doc)
-        tmj->write(doc->map(),path,{});
-    qDebug() << "TMJ export done.";
+    if(tmj)
+    {
+        //create new instance of export helper with customised options
+        Preferences::ExportOptions options = Preferences::instance()->exportOptions();
+        options |= Preferences::EmbedTilesets;
+
+        Tiled::ExportHelper exportHelper(options);
+        //prepareExportMap expects smart ptr
+        //Cache the map we are exporting - ready to write
+        std::unique_ptr<Tiled::Map> exportMap;
+        const Tiled::Map *mapForExport = exportHelper.prepareExportMap(doc->map(),exportMap);
+        //instead of passing in doc->map in directly
+        //we write the new export ready map produced by export helper with out custom options
+        tmj->write(mapForExport, path, exportHelper.formatOptions());
+    }
 }
 
 
