@@ -178,6 +178,8 @@ private:
 
     void editWorldProperties();
     void onAddLabelTriggered();
+    void onAddButtonTriggered();
+    void onAddprogressbarTriggered();
 
     void updateWindowTitle();
     void updateActions();
