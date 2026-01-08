@@ -556,6 +556,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
     ActionManager::registerMenu(mGroupLayerMenu, "GroupLayer");
     connect(mUi->actionlabel, &QAction::triggered, this, &MainWindow::onAddLabelTriggered);
     connect(mUi->actionbutton, &QAction::triggered, this, &MainWindow::onAddButtonTriggered);
+    connect(mUi->actionprogressbar, &QAction::triggered, this, &MainWindow::onAddprogressbarTriggered);
 
     connect(mUi->actionCreate_Entity, &QAction::triggered, this, &MainWindow::onCreateEntity);
     
@@ -2320,6 +2321,71 @@ void MainWindow::onCreateEntity()
 }
 
 void MainWindow::onAddLabelTriggered(){
+    MapDocument *mMapDocument = dynamic_cast<MapDocument*>(DocumentManager::instance()->currentDocument());
+    Layer* CurrentLayer = nullptr;
+
+    if(mMapDocument)
+    {
+        CurrentLayer = mMapDocument->currentLayer();
+    }
+
+    QDialog *InvalidLayer;
+    QVBoxLayout *InvalidLayerLayout;
+    QLabel *InvalidLayerLabel;
+
+    QDialog *CreateObject;
+    QLabel *CreateObjectLabel;
+    QLineEdit *CreateObjectName;
+    QVBoxLayout *CreateObjectLayout;
+    QDialogButtonBox *CreateObjectConfirm;
+
+    InvalidLayer = new QDialog();
+    CreateObject = new QDialog();
+
+    InvalidLayerLabel = new QLabel(QString::fromStdString("Invalid Layer!"));
+    CreateObjectLabel = new QLabel(QString::fromStdString("Object Name:"));
+    CreateObjectName = new QLineEdit();
+    CreateObjectConfirm = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal, CreateObject);
+
+
+    InvalidLayerLayout = new QVBoxLayout(InvalidLayer);
+    CreateObjectLayout = new QVBoxLayout(CreateObject);
+
+    InvalidLayerLayout->addWidget(InvalidLayerLabel);
+    CreateObjectLayout->addWidget(CreateObjectLabel);
+    CreateObjectLayout->addWidget(CreateObjectName);
+    CreateObjectLayout->addWidget(CreateObjectConfirm);
+
+    connect(CreateObjectConfirm, &QDialogButtonBox::rejected, this, [=]{
+        CreateObject->reject();
+    });
+
+    if(CurrentLayer && CurrentLayer->layerType() == Layer::ObjectGroupType){
+        ObjectGroup *objectGroup = dynamic_cast<ObjectGroup*>(CurrentLayer);
+        connect(CreateObjectConfirm, &QDialogButtonBox::accepted, this, [=]{
+
+            auto *NewMapObject = new Tiled::MapObject;
+            NewMapObject->setName(CreateObjectName->text());
+            NewMapObject->setPosition(QPointF(0,0));
+
+            //int entityid = MainWindow::nextEntityID();
+            //NewMapObject->setProperty(QString::fromStdString("EntityID"), entityid);
+
+            NewMapObject->setProperty(QStringLiteral("text"),QVariant(QStringLiteral("UIlabel")));
+
+            auto *CreateObjectcmd = new Tiled::AddMapObjects(mMapDocument, objectGroup, NewMapObject);
+            mMapDocument->undoStack()->push(CreateObjectcmd);
+
+            CreateObject->accept();
+        });
+        CreateObject->show();
+    }
+    else
+    {
+        InvalidLayer->show();
+    }
+}
+void MainWindow::onAddprogressbarTriggered(){
     MapDocument *mMapDocument = dynamic_cast<MapDocument*>(DocumentManager::instance()->currentDocument());
     Layer* CurrentLayer = nullptr;
 

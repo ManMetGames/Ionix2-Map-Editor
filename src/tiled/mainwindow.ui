@@ -240,6 +240,7 @@
     </property>
     <addaction name="actionlabel"/>
     <addaction name="actionbutton"/>
+    <addaction name="actionprogressbar"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -869,6 +870,11 @@
   <action name="actionbutton">
    <property name="text">
     <string>button</string>
+   </property>
+  </action>
+  <action name="actionprogressbar">
+   <property name="text">
+    <string>progressbar</string>
    </property>
   </action>
  </widget>
