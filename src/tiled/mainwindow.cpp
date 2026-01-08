@@ -2436,7 +2436,14 @@ void MainWindow::onAddprogressbarTriggered(){
             //int entityid = MainWindow::nextEntityID();
             //NewMapObject->setProperty(QString::fromStdString("EntityID"), entityid);
 
-            NewMapObject->setProperty(QStringLiteral("text"),QVariant(QStringLiteral("UIlabel")));
+            NewMapObject->setProperty(QStringLiteral("type"),QVariant(QStringLiteral("UIProgressBar")));
+
+            NewMapObject->setProperty(QStringLiteral("maxValue"),QVariant(0.0f));//sets it as a float
+
+            NewMapObject->setProperty(QStringLiteral("currentValue"),QVariant(0.0f));//sets it as a float
+
+            NewMapObject->setProperty(QStringLiteral("colorID"),QVariant(0));//sets it as a int
+
 
             auto *CreateObjectcmd = new Tiled::AddMapObjects(mMapDocument, objectGroup, NewMapObject);
             mMapDocument->undoStack()->push(CreateObjectcmd);
